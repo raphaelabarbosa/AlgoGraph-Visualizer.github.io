@@ -19,6 +19,8 @@ function draw(){
 
 function graph_draw(){
     background(220);
+
+    //Nota:
     //1.Receber número de vértice (n)
     //2.Receber vértices
     //3.Fazer compressão de coordenada com map (Compr.,Original)
@@ -29,11 +31,22 @@ function graph_draw(){
     
     let n = parseInt(graph_input[0].trim()); //Número de vértices
     //console.log(n);
+
+    // Separa vértices únicos e ordena em ordem crescente.
+    let vertices_set = new Set();
     for(let i = 1; i < graph_input.length; i++){ 
         let edge = graph_input[i].split("-").map(x => parseInt(x.trim())); //edge = {x1,x2}
         //console.log(edge);
-    }
 
+        vertices_set.add(edge[0]);
+        vertices_set.add(edge[1]);
+    }
+    const vertices_ordenados = [...vertices_set].sort((a, b) => a - b);
+
+    //Compressão e map
+
+
+    //Desenho vértice
     // let x = 50;
     // let y = 50;
     // let diametro = 25;
