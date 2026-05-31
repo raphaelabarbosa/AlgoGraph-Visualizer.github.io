@@ -1,0 +1,40 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: sans-serif;
+    overflow: hidden;
+}
+
+/* Container pai */
+.layout-container {
+    display: flex; /* Modo Flexbox, ajuste automático dos elementos filhos*/
+    width: 100vw; /* 100% da largura da janela */
+    height: 100vh; /* 100% da altura da janela */
+}
+
+/* Lado Esquerdo (Texto) */
+#text-side {
+    flex: 1; /* Dividi o espaço igualmente */
+    background-color: #f0f0f0; 
+    padding: 40px;
+    box-sizing: border-box;
+    overflow-y: auto; /* Barra de rolagem */
+}
+
+/* Card branco */
+#main-card {
+    background-color: white;
+    padding: 35px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* Lado Direito (Canvas) */
+#canvas-side {
+    flex: 1;           
+    background-color: #403c3c; 
+    display: flex;
+    justify-content: center; /* Centraliza o desenho na horizontal */
+    align-items: center; /* Centraliza o desenho na vertical */
+}

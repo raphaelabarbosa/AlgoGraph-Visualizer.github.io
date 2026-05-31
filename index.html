@@ -3,17 +3,30 @@
     <head>
         <meta charset="utf-8" />
         <title>AlgoGraph-Visualizer</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.js"></script>
     </head>
     <body>
-        <h1>Computer Graphics Project</h1>
-        <h2>Graph Algorithm Visualizer</h2>
+        <div class="layout-container">
 
-        <p>This project is being developed for the Computer Graphics course with the objective of creating a graph algorithm visualizer using P5.js. The initial stage focuses on building a visual graph editor, allowing users to create graph structures. In later stages, the project will explore the visualization of graph algorithms through animations that illustrate their execution step by step. The main goal is to provide an educational tool that helps students better understand graph structures and the behavior of graph algorithms through visual representations.</p>
-        
-        <h3>Graph Builder</h3>
-        <p>Enter graph edges using the format `source-target`, separating multiple edges with commas. For example, `1-2,3-4` represents two edges: one connecting vertex 1 to vertex 2, and another connecting vertex 3 to vertex 4.</p>
-        <div id="graph-builder-container"></div>
+            <div id="text-side">
+                <div id="main-card">
+                    <h1>Computer Graphics Project</h1>
+                    <h2>Graph Algorithm Visualizer</h2>
+
+                    <p>This project is being developed for the Computer Graphics course with the objective of creating a graph algorithm visualizer using P5.js. The initial stage focuses on building a visual graph editor, allowing users to create graph structures. In later stages, the project will explore the visualization of graph algorithms through animations that illustrate their execution step by step. The main goal is to provide an educational tool that helps students better understand graph structures and the behavior of graph algorithms through visual representations.</p>
+                    
+                    <h3>Graph Builder</h3>
+                    <p>Enter graph edges using the format `source-target`, separating multiple edges with commas. For example, `1-2,3-4` represents two edges: one connecting vertex 1 to vertex 2, and another connecting vertex 3 to vertex 4.</p>
+                    <!-- input -->
+                    <div id="graph-builder-container"></div> 
+                </div>
+            </div>
+            
+            <div id="canvas-side"></div>
+
+        </div>
+
         <script src="graphBuilder.js"></script>
         
     </body>

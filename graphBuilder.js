@@ -1,13 +1,16 @@
 let Input;
 
 function setup(){
-    createCanvas(300,300);
-    background(220);
+    let canvas = createCanvas(500,500);
+    canvas.parent('canvas-side'); 
 
     Input = createInput();
-    Button = createButton('submit');
     Input.parent('graph-builder-container');
+
+    Button = createButton('submit');
     Button.parent('graph-builder-container');
+
+     background(220);
 }
 
 function draw(){
