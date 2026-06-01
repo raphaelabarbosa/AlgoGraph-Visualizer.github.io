@@ -34,7 +34,7 @@ function graph_draw(){
 
     // Separa vértices únicos e ordena em ordem crescente.
     let vertices_set = new Set();
-    for(let i = 1; i < graph_input.length; i++){ 
+    for(let i = 0; i < graph_input.length; i++){ 
         let edge = graph_input[i].split("-").map(x => parseInt(x.trim())); //edge = {x1,x2}
         //console.log(edge);
 
@@ -43,25 +43,22 @@ function graph_draw(){
     }
     const vertices_ordenados = [...vertices_set].sort((a, b) => a - b);
 
-    //Compressão e map
-
-
-    //Desenho vértice
-    // let x = 50;
-    // let y = 50;
-    // let diametro = 25;
-    // for(let v of par){
-    //     //Circulo
-    //     fill(255); 
-    //     stroke(0); 
-    //     circle(x, y, diametro);
-    //     //Texto
-    //     fill(0); 
-    //     textSize(10);
-    //     textAlign(CENTER, CENTER); 
-    //     text(v.trim(), x, y);
-    //     x+= 50;
-    // }
-    // x = 50;
-    // y += 50;
+    // Desenho vértice
+    let x = 50;
+    let y = 50;
+    let diametro = 25;
+    for(let v of vertices_ordenados){
+        //Circulo
+        fill(255); 
+        stroke(0); 
+        circle(x, y, diametro);
+        //Texto
+        fill(0); 
+        textSize(10);
+        textAlign(CENTER, CENTER); 
+        text(String(v), x, y);
+        x+= 50;
+    }
+    x = 50;
+    y += 50;
 }
