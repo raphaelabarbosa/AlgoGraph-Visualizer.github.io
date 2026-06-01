@@ -1,4 +1,5 @@
 let Input;
+let Positions;
 
 function setup(){
     let canvas = createCanvas(500,500);
@@ -31,37 +32,74 @@ function graph_draw(){
     
     let n = parseInt(graph_input[0].trim()); //Número de vértices
     //console.log(n);
-
+    
     // Separa vértices únicos e ordena em ordem crescente.
     let vertices_set = new Set();
-    for(let i = 1; i < graph_input.length; i++){ 
+    // Cria uma lista de adjacência. 
+    let adjacency_list = new Map();
+    for(let i = 0; i < graph_input.length; i++){ 
         let edge = graph_input[i].split("-").map(x => parseInt(x.trim())); //edge = {x1,x2}
         //console.log(edge);
 
         vertices_set.add(edge[0]);
         vertices_set.add(edge[1]);
+
+        if(!adjacency_list.has(edge[0])) adjacency_list.set(edge[0], []);
+        if(!adjacency_list.has(edge[1])) adjacency_list.set(edge[1], []);
+
+        adjacency_list.get(edge[0]).push(edge[1]);
+        adjacency_list.get(edge[1]).push(edge[0]);
     }
     const vertices_ordenados = [...vertices_set].sort((a, b) => a - b);
+    
+    // Configura posição inicial dos pontos
+    Positions = new Map();
+    for(let i = 0; i < vertices_ordenados.length; i++){
+        let v = vertices_ordenados[i];
+        let max = 450; let min = 50;
+        let x = Math.floor(Math.random() * (max - min + 1)) + min;
+        let y = Math.floor(Math.random() * (max - min + 1)) + min;
+        Positions.set(v, createVector(x, y));
+    }
+    
+    // Desenho aresta
+    let edgeThickness = 5;
+    for(v of vertices_ordenados){
+        for(j of adjacency_list.get(v)){
+            if(j < v) continue;
+            let edgeLength = Positions.get(v).dist(Positions.get(j));
+            let midPoint = p5.Vector.lerp(Positions.get(v), Positions.get(j), 0.5);
+            let angle = p5.Vector.sub(Positions.get(j), Positions.get(v)).heading();
 
-    //Compressão e map
-
-
-    //Desenho vértice
-    // let x = 50;
-    // let y = 50;
-    // let diametro = 25;
-    // for(let v of par){
-    //     //Circulo
-    //     fill(255); 
-    //     stroke(0); 
-    //     circle(x, y, diametro);
-    //     //Texto
-    //     fill(0); 
-    //     textSize(10);
-    //     textAlign(CENTER, CENTER); 
-    //     text(v.trim(), x, y);
-    //     x+= 50;
-    // }
-    // x = 50;
-    // y += 50;
+            // Retângulo representando aresta
+            push();
+            rectMode(CENTER);
+            
+            translate(midPoint.x, midPoint.y); 
+            rotate(angle); 
+            
+            fill(0); 
+            noStroke();
+            rect(0, 0, edgeLength, edgeThickness); 
+            
+            pop();  
+        }
+    }
+    
+    
+    // Desenho vértice
+    let diametro = 25;
+    for(let v of vertices_ordenados){
+        push();
+        //Circulo
+        fill(255); 
+        stroke(0); 
+        circle(Positions.get(v).x, Positions.get(v).y, diametro);
+        //Texto
+        fill(0); 
+        textSize(10);
+        textAlign(CENTER, CENTER); 
+        text(String(v), Positions.get(v).x, Positions.get(v).y);
+        pop();
+    }
 }
