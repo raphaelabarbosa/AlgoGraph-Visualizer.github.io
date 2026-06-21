@@ -15,8 +15,14 @@ function setup(){
     background(220);
     canvas.parent('canvas-side'); 
 
-    Input = createInput();
+    //Input
+    Input = createElement('textarea');
     Input.parent('graph-builder-container');
+    Input.size(300, 100);
+    Input.attribute(
+        'placeholder',
+        '1 2\n3 4'
+    );
 
     // Opções de geração do grafo
     layoutRadio = createRadio();
@@ -44,7 +50,7 @@ function setup(){
 }
 
 function input_processing(){
-    let graph_input = Input.value().split(","); //Separando valores do input em um array: string "n, v1-v2, v3-v2,...""
+    let graph_input =  Input.value().split('\n'); //Separando valores do input em um array: string "v1 v2,v3 v4,..""
     adj_map.clear(); 
     pos.clear();
     color.clear();
@@ -52,11 +58,14 @@ function input_processing(){
     // let n = parseInt(graph_input[0].trim()); //Número de vértices
     //console.log(n);
 
-    // Separa vértices únicos e ordena em ordem crescente.
+    //Separa os vértices de cada aresta, converte de string para inteiro e constroi map de adj.
     for(let i = 0; i < graph_input.length; i++){ 
-        let edge = graph_input[i].split("-").map(x => parseInt(x.trim())); //edge = {x1,x2}
+        if (graph_input[i].trim() === "") continue; //Trata linhas em branco
+
+        let edge = graph_input[i].trim().split(/\s+/).map(Number); //edge[] = {x1,x2}
         //console.log(edge);
 
+        //Trata caso seja a primeira inserção
         if (!adj_map.has(edge[0])) {
             adj_map.set(edge[0], []);
         }
