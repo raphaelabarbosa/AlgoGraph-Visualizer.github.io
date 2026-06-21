@@ -115,8 +115,21 @@ function set_pos(){
                         //Setar posição
                         pos.set(viz, {
                             x: pos.get(v).x + random(-100,100),
-                            y: pos.get(v).y + 100
+                            y: pos.get(v).y + 50
                         });
+                        
+                        //Limita a posição para dentro do canvas
+                        pos.get(viz).x = constrain(
+                            pos.get(viz).x,
+                            25,
+                            width - 25
+                        );
+
+                        pos.get(viz).y = constrain(
+                            pos.get(viz).y,
+                            25,
+                            height - 25
+                        );
                     }
                 }
             }
