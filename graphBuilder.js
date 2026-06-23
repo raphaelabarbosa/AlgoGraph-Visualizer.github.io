@@ -2,6 +2,7 @@ let Input;
 let adj_map = new Map(); //Map de adjacência
 let pos = new Map(); //Posições dos vértices
 let color = new Map(); //Cor de cada vértice
+let isDirected = false;
 
 //Lista de steps da animação
 let animationSteps = [];
@@ -37,7 +38,11 @@ function setup(){
     //Desenhar grafo
     Button_draw = createButton('Draw');
     Button_draw.parent('graph-builder-container');
-    Button_draw.mousePressed(draw_graph);
+    Button_draw.mousePressed(draw_graph_bi);
+
+    Button_draw_directed = createButton('Draw Directed');
+    Button_draw_directed.parent('graph-builder-container');
+    Button_draw_directed.mousePressed(draw_graph_dir);
 
     //Animações
 
@@ -76,7 +81,7 @@ function input_processing(){
         }
 
         if (edge.length === 2) adj_map.get(edge[0]).push(edge[1]);
-        if (edge.length === 2) adj_map.get(edge[1]).push(edge[0]);
+        if (edge.length === 2 && !isDirected) adj_map.get(edge[1]).push(edge[0]);
     }
 }
 
@@ -190,28 +195,26 @@ function set_pos(){
             //Cálculo da força de atração
             for (const [v, vizinhos] of adj_map) {
                 for (const viz of vizinhos) {
-                    if(v < viz){
-                        //Posições
-                        let pv = pos.get(v); 
-                        let pviz = pos.get(viz); 
+                    //Posições
+                    let pv = pos.get(v); 
+                    let pviz = pos.get(viz); 
 
-                        //Vetor
-                        let dx = pv.x - pviz.x; 
-                        let dy = pv.y - pviz.y;
+                    //Vetor
+                    let dx = pv.x - pviz.x; 
+                    let dy = pv.y - pviz.y;
 
-                        //Distância euclidiana
-                        let dist = max(sqrt(dx*dx + dy*dy),0.01);
+                    //Distância euclidiana
+                    let dist = max(sqrt(dx*dx + dy*dy),0.01);
 
-                        //Força de atração entre v e viz
-                        let force = (dist*dist)/k;
-                        let dx_un = dx/dist;
-                        let dy_un = dy/dist;
+                    //Força de atração entre v e viz
+                    let force = (dist*dist)/k;
+                    let dx_un = dx/dist;
+                    let dy_un = dy/dist;
 
-                        disp.get(v).x -= dx_un * force; 
-                        disp.get(v).y -= dy_un * force; 
-                        disp.get(viz).x += dx_un * force; 
-                        disp.get(viz).y += dy_un * force;
-                    }
+                    disp.get(v).x -= dx_un * force; 
+                    disp.get(v).y -= dy_un * force; 
+                    disp.get(viz).x += dx_un * force; 
+                    disp.get(viz).y += dy_un * force;
                 }
             }
 
@@ -269,10 +272,44 @@ function render_graph(){
             let p = pos.get(v);
 
             for (const viz of vizinhos) {
-                if (v < viz) {
+                if (v < viz || isDirected) {
                     let pz = pos.get(viz);
                     line(p.x, p.y, pz.x, pz.y);
                 }
+            }
+        }
+
+    }
+    
+    const draw_arrows = () =>{
+        // If graph is directed, draws arrows in edges
+        for (const [v, vizinhos] of adj_map) {
+            let p = pos.get(v);
+            let P = createVector(p.x, p.y)
+
+            for (const viz of vizinhos) {
+                let pz = pos.get(viz);
+                let Pz = createVector(pz.x, pz.y);
+                push();
+                let arrowPoint = p5.Vector.lerp(P, Pz, 0.8);
+                let angle = p5.Vector.sub(Pz, P).heading();
+                
+                translate(arrowPoint.x, arrowPoint.y); 
+                rotate(angle); 
+                
+                fill(0);      // Preenchimento preto
+                noStroke();   // Tira a borda para a ponta ficar bem afiada
+
+                let arrowSize = 14; // Comprimento da seta
+
+                // Draws the triangle
+                triangle(
+                    0, 0,
+                    -arrowSize, -arrowSize/2,
+                    -arrowSize,  arrowSize/2 
+                );
+
+                pop();
             }
         }
     }
@@ -293,6 +330,7 @@ function render_graph(){
     }
 
     draw_edge();
+    if(isDirected) draw_arrows();
     draw_vertices();
 }
 
@@ -310,6 +348,16 @@ function draw_graph(){
     //Limpa as animações
     animationSteps = [];
     currentStep = 0;
+}
+
+function draw_graph_dir(){
+    isDirected = true;
+    draw_graph();
+}
+
+function draw_graph_bi(){
+    isDirected = false;
+    draw_graph();
 }
 
 function draw_dfs(){
